@@ -1,0 +1,5 @@
+[0.1.0]
+* Initial Cloudron package for LibreCrawl commit 05a1372.
+* Signed-in-only access with operator-managed accounts and persistent sessions.
+* Persistent SQLite data, upgrade snapshots and daily finished-crawl retention.
+* Chromium rendering available, disabled by default; 2 GiB default memory.

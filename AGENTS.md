@@ -5,6 +5,8 @@
 ## Quick Reference
 
 - **Validate**: `cloudron-package-helper.sh validate`
+- **Static checks**: `bash test/package-test.sh`
+- **Shell lint**: `shellcheck start.sh bin/librecrawl-user bin/librecrawl-retention scripts/*.sh test/*.sh`
 - **Build**: `cloudron-package-helper.sh build`
 - **Test install**: `cloudron-package-helper.sh install librecrawl-test`
 - **Release checks**: `cloudron-package-helper.sh check-compatibility` and

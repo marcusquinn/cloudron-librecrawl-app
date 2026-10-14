@@ -29,3 +29,25 @@ We use [Conventional Commits](https://www.conventionalcommits.org/):
 - `docs:` - Documentation only
 - `refactor:` - Code change that neither fixes a bug nor adds a feature
 - `chore:` - Maintenance tasks
+
+## Package verification
+
+```bash
+cloudron-package-helper.sh validate
+cloudron-package-helper.sh check-compatibility
+bash test/package-test.sh
+shellcheck start.sh bin/librecrawl-user bin/librecrawl-retention scripts/*.sh test/*.sh
+docker build --platform linux/amd64 -t librecrawl-cloudron:dev .
+```
+
+Use a disposable Docker volume mounted at `/app/data`, `--read-only`, and tmpfs
+at `/tmp` and `/run`. Verify `/login`, admin and service-account login, blocked
+registration/guest/anonymous access, a small API crawl and CSV export, sessions
+after restart, and retention of completed crawls including child rows. Do not
+target production data for destructive verification. Record evidence in the PR.
+
+Pin upstream by full commit and final Cloudron base by digest. Changes to
+upstream behavior belong upstream, not in package source patches. Do not commit
+secrets or hand-write `CloudronVersions.json`; only the publication workflow
+generates that file using the pinned Cloudron CLI. Follow [publishing](docs/PUBLISHING.md)
+for release authority and live qualification.
