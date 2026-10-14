@@ -23,5 +23,7 @@ done
 if [[ -f CloudronVersions.json ]]; then
     jq -e '.versions | type == "object"' CloudronVersions.json >/dev/null
 fi
-bash -n start.sh bin/librecrawl-user bin/librecrawl-retention scripts/publish-cloudron-catalog.sh
+for script in start.sh bin/librecrawl-user bin/librecrawl-retention bin/librecrawl-config scripts/publish-cloudron-catalog.sh; do
+    bash -n "$script"
+done
 printf 'Package static checks passed\n'

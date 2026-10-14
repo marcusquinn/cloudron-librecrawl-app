@@ -4,15 +4,14 @@ umask 077
 mkdir -p /app/data
 cd /app/code
 
-# The env file is operator-owned shell configuration, never user/API input.
+# The app-writable env file contains literal operator configuration, not shell code.
 if [[ ! -f /app/data/env ]]; then
     printf '# LibreCrawl operator configuration\nCRAWL_RETENTION_DAYS=90\nCRAWL_VACUUM=false\n' > /app/data/env.tmp
     mv /app/data/env.tmp /app/data/env
 fi
-set -a
 # shellcheck disable=SC1091
-source /app/data/env
-set +a
+source /app/code/bin/librecrawl-config
+load_librecrawl_config /app/data/env
 for flag in LOCAL_MODE DANGEROUSLY_SKIP_AUTH DEMO_MODE; do
     value="${!flag:-false}"
     case "${value,,}" in

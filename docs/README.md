@@ -68,6 +68,11 @@ CRAWL_RETENTION_DAYS=90
 CRAWL_VACUUM=false
 ```
 
+Configuration is literal `KEY=value` data, not shell code: do not quote values
+or use shell expansion. Blank lines and lines starting with `#` are ignored;
+unknown keys are rejected. The only accepted keys are `CRAWL_RETENTION_DAYS`,
+`CRAWL_VACUUM`, `LOCAL_MODE`, `DANGEROUSLY_SKIP_AUTH` and `DEMO_MODE`.
+
 The scheduler runs at 03:00 daily (Cloudron scheduler time). Upstream's rule
 uses the crawl's **start time**, not completion time, and only deletes
 `completed`, `failed`, or `stopped` crawls. Running and paused crawls are kept.

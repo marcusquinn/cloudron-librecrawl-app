@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: cloudron-catalog-publish
+  group: cloudron-catalog-publish-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
   cancel-in-progress: false
 
 env:
@@ -98,7 +98,7 @@ jobs:
     if: needs.preflight.outputs.publish == 'true'
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
+      contents: read
       attestations: write
       id-token: write
     steps:

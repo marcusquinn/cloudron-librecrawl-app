@@ -4,10 +4,9 @@ if [[ "$(id -u)" == 0 ]]; then
     exec gosu cloudron:cloudron "$0" "$@"
 fi
 cd /app/code
-set -a
 # shellcheck disable=SC1091
-source /app/data/env
-set +a
+source /app/code/bin/librecrawl-config
+load_librecrawl_config /app/data/env
 exec /app/code/venv/bin/python - <<'PY'
 import os
 import sqlite3
