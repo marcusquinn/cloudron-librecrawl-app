@@ -12,6 +12,11 @@
 <!-- aidevops:badges:end -->
 LibreCrawl self-hosted SEO crawler - Cloudron app package
 
+[LibreCrawl](https://github.com/PhialsBasement/LibreCrawl) on Cloudron: an
+always-on crawler server that WordPress sites running SEO Pro Stats can sign
+in to, crawl themselves on a schedule and import the results. The package is
+in development: see [the package task](todo/tasks/t4-brief.md).
+
 <!-- aidevops:managed-readme:start -->
 <!-- managed by aidevops; refresh with managed-readme-helper.sh sync -->
 ## Star History

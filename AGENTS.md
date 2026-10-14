@@ -4,17 +4,29 @@
 
 ## Quick Reference
 
-- **Build**: `# TODO: add build command`
-- **Test**: `# TODO: add test command`
-- **Deploy**: `# TODO: add deploy command`
+- **Validate**: `cloudron-package-helper.sh validate`
+- **Build**: `cloudron-package-helper.sh build`
+- **Test install**: `cloudron-package-helper.sh install librecrawl-test`
+- **Release checks**: `cloudron-package-helper.sh check-compatibility` and
+  `cloudron-package-helper.sh preflight-release vX.Y.Z`
 
 ## Project Overview
 
-<!-- Brief description of what this project does and why it exists. -->
+Cloudron app package for [LibreCrawl](https://github.com/PhialsBasement/LibreCrawl)
+(MIT), a self-hosted website crawler for SEO audits. It gives hosted
+WordPress sites running SEO Pro Stats a crawler server they can reach: each
+site signs in with a LibreCrawl account, crawls itself on a schedule and
+imports the result.
 
 ## Architecture
 
-<!-- Key architectural decisions, tech stack, directory structure. -->
+Mirror the structure of `marcusquinn/cloudron-netbird-app`: `Dockerfile` pinned to
+the Cloudron base image, `start.sh`, `CloudronManifest.json`, `docs/` for
+operator guides, and the Cloudron release and catalog-publish workflows.
+Upstream has no tags: pin LibreCrawl by commit. Signed-in use only:
+registration, guest sign-in, local mode and skip-auth stay off. All state in
+`/app/data`; old crawls are removed by a scheduled retention task. Design and
+decisions: `todo/tasks/t4-brief.md`.
 
 ## Conventions
 
