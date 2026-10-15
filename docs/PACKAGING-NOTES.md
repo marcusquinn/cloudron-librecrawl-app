@@ -59,10 +59,12 @@ uninterrupted crawl.
 
 ## Process supervision
 
-`start.sh` execs `tini` as PID 1, which runs upstream through `gosu`. Each
-JavaScript crawl orphans two Chromium helper processes; with upstream as PID 1
-they stayed defunct until restart (five after three crawls on the live test).
-tini reaps them and forwards SIGTERM, so the shutdown handler above still runs.
+`start.sh` execs `tini` as PID 1, which runs upstream through `gosu`.
+JavaScript crawls orphan Chromium helper processes; with upstream as PID 1 they
+stayed defunct until restart (five after three crawls on the live test). Under
+tini, three more JavaScript crawls left none. tini forwards SIGTERM, so the
+shutdown handler above still runs: a restart mid-crawl under tini still saved
+the crawl as `paused`.
 
 ## Upstream crawl behaviour clients must allow for
 
@@ -105,10 +107,10 @@ built on the server from this repository, passed these checks:
   issues in 7 min 43 s; `users.db` grew by about 130 MB.
 - JavaScript on native amd64: Chromium rendered a script-built title and
   followed links that exist only after rendering.
-- Restart mid-crawl: the crawl was saved as `paused` and the resume endpoint
-  completed it. The signing key, users and crawls survived restart, backup and
-  restore, and an image update; restore removed an account created after the
-  backup.
+- Restart mid-crawl, before and after the tini change: the crawl was saved as
+  `paused` and the resume endpoint completed it. The signing key, users and
+  crawls survived restart, backup and restore, and an image update; restore
+  removed an account created after the backup.
 - Retention through the Cloudron scheduler (temporary two-minute schedule in a
   disposable build): with 90 days nothing was deleted; with
   `CRAWL_RETENTION_DAYS=1` it deleted only a crawl backdated three days, with
