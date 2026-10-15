@@ -45,23 +45,44 @@ password resets require clients to sign out/in to refresh their session tier.
 Configure the plugin with the app's HTTPS URL and this username/password.
 The API contract is `POST /api/login`, `POST /api/save_settings`,
 `POST /api/start_crawl`, `GET /api/crawl_status`, `GET /api/crawls/list`,
-`POST /api/crawls/<id>/load`, and
-`GET /api/export_stream?type=urls&format=csv`. Save `maxUrls: 50` for a first
-smoke crawl. Clients retain the login cookie; finished crawls are persistent.
-Restarting the app stops in-memory work; load persisted results afterwards.
+`POST /api/crawls/<id>/load`, `POST /api/crawls/<id>/resume`, and
+`GET /api/export_stream?type=urls&format=csv` (or `type=links`). Save
+`maxUrls: 50` for a first smoke crawl. Clients retain the login cookie;
+finished crawls are persistent. A restart or update saves a running crawl as
+`paused`: resume it from the same account instead of waiting for completion.
+
+At the pinned upstream commit, clients should allow for this:
+
+- `crawlDelay` only throttles JavaScript crawls; `concurrency` is the real
+  limit on HTML crawls, plus up to five HEAD checks at a time.
+- JavaScript crawls send `jsUserAgent`, not `userAgent`; set both.
+- `maxUrls` counts fetched pages, but exports also have rows for HEAD-checked
+  images and external links (19,781 rows for 5,000 pages in qualification).
+- A 5,000-page site's links export is about 50 MB and takes over 20 seconds to
+  generate; give export requests a minute or more.
 
 ## Memory and JavaScript
 
 Default memory is 2 GiB and JavaScript rendering is off. Only Chromium is
-installed. When enabling JavaScript in settings, select Chromium, start with
-one concurrent browser page, and raise the Cloudron memory limit to at least
-4 GiB for larger sites. Actual needs depend on page size and concurrency.
-Unexpected restarts, incomplete crawls or Chromium crashes can indicate OOM;
-check Cloudron app logs and resource usage before increasing concurrency.
+installed. Measured in qualification: a 5,000-page HTML crawl peaked at
+1.16 GiB including load and export, and each signed-in session keeps its crawl
+in memory until it has been idle for an hour, so crawls from several sites in
+the same hour add up. JavaScript added 0.6 GiB with one browser page and
+0.9 GiB with three (the default) on a small site.
+
+2 GiB holds one large HTML crawl at a time. Raise the Cloudron memory limit to
+4 GiB if several sites with thousands of pages may crawl in the same hour, or
+before using JavaScript on anything but small sites. When enabling JavaScript,
+select Chromium and start with one concurrent browser page
+(`jsMaxConcurrentPages: 1`). Unexpected restarts, incomplete crawls or Chromium
+crashes can indicate OOM; check Cloudron app logs and resource usage before
+increasing concurrency.
 
 ## Retention
 
-Edit `/app/data/env` in the operator terminal, then restart the app:
+Edit `/app/data/env` in the operator terminal. The retention task rereads and
+validates the file at every run, so retention changes need no app restart
+(a restart would pause running crawls):
 
 ```bash
 CRAWL_RETENTION_DAYS=90
@@ -84,6 +105,9 @@ Cascades delete pages, links, issues and queue rows in the same transaction.
 Vacuum is opt-in: it blocks writers and needs free disk roughly equal to the
 database size. Without vacuum SQLite reuses freed pages rather than shrinking
 the file. Retention is not a fixed disk quota; monitor growing/paused crawls.
+A crawl paused by a restart and never resumed is kept indefinitely. For sizing,
+the 5,000-page qualification crawl added about 130 MB to `users.db`; weekly
+crawls kept for 90 days mean about 13 stored crawls per site.
 
 ## Backup, upgrades and recovery
 

@@ -47,8 +47,39 @@ cleanup thread runs every five minutes and drops instances idle for one hour,
 stopping even a running crawl if the client stops accessing it. Persisted crawls
 remain in SQLite, so weekly/monthly clients must
 use the saved crawl list/load endpoints rather than assume a live instance.
-Restarts stop live in-memory crawls; upstream crash-recovery state may be loaded.
 Tier and password changes do not invalidate already-issued cookies.
+
+Stopping the container (restart, update) sends SIGTERM: upstream saves each
+running crawl as `paused`, and `POST /api/crawls/<id>/resume` from the owning
+account continues it. A crash or OOM kill skips that handler; upstream startup
+then marks running crawls `failed`, which are also resumable and eligible for
+retention. A resumed crawl counts its saved rows, including HEAD-check rows for
+images and external links, against `maxUrls`, so it fetches fewer pages than an
+uninterrupted crawl.
+
+## Process supervision
+
+`start.sh` execs `tini` as PID 1, which runs upstream through `gosu`.
+JavaScript crawls orphan Chromium helper processes; with upstream as PID 1 they
+stayed defunct until restart (five after three crawls on the live test). Under
+tini, three more JavaScript crawls left none. tini forwards SIGTERM, so the
+shutdown handler above still runs: a restart mid-crawl under tini still saved
+the crawl as `paused`.
+
+## Upstream crawl behaviour clients must allow for
+
+- `crawlDelay` only throttles JavaScript crawls: the HTML crawl path never calls
+  the rate limiter. On the live test, 15 pages with a 5-second delay finished in
+  about a second. `concurrency` plus up to five HEAD-check workers is the only
+  limit. Follow-up: propose applying the rate limiter to the HTML path upstream.
+- JavaScript crawls send `jsUserAgent` (default `LibreCrawl/1.0 (Web Crawler
+  with JavaScript)`), not `userAgent`. A WAF-protected WordPress site answered
+  403 to the default and 200 once the client set both.
+- `maxUrls` counts fetched pages, but results also get a row for every
+  HEAD-checked image and external link: 5,000 pages gave 19,781 URL rows.
+- Links exports are slow to generate: inside the container, that crawl's
+  397,953-row links CSV (49.5 MB) took 22.8 s, against 0.6 s for the 2.4 MB URL
+  CSV. Clients need about a minute of export timeout for sites this size.
 
 ## Network security follow-up
 
@@ -60,15 +91,40 @@ browser subresources and proxies; alternatively qualify a package-level egress
 policy. Until then access is only for fully trusted accounts. Cloudron ingress
 TLS/proxy configuration does not fix outbound reachability.
 
-## Qualification boundary
+## Live qualification (t5)
 
-Local Docker evidence belongs in the implementation PR. Live Cloudron install,
-upgrade, backup/restore and plugin connection are operator qualification in t5.
-The implementation runner is arm64; Cloudron's pinned base is amd64. The
-read-only web/API/account/restart/retention checks passed under emulation.
-A supplementary Chromium render attempt failed with QEMU signal 5 and an
-unusable GPU process. Chromium installation is verified, but actual JS rendering
-must be qualified on native amd64 in t5; no upstream launch flags were patched
-to disguise this runner limitation.
-Publication is disabled until the operator enables it explicitly; this task
-does not publish or change other repositories. See [PUBLISHING.md](PUBLISHING.md).
+On 2026-10-15 a disposable Cloudron 10.0.5 install (x86_64, 8 CPUs, 15 GiB),
+built on the server from this repository, passed these checks:
+
+- Health, sign-in and refusals: `/login` 200 and `/` redirects there;
+  anonymous API calls get 401; registration and guest sign-in are refused; the
+  generated admin password works and can be reset; a `librecrawl-user add`
+  service account signs in, and duplicates are refused.
+- Client path: login, `save_settings`, `start_crawl`, `crawl_status` polling,
+  `crawls/list`, `crawls/<id>/load` and URL/links CSV exports, all 200.
+- HTML crawl of 5,000 pages (loopback synthetic WordPress-shaped site, 6,000
+  posts plus archives and sitemaps): 19,781 URL rows, 397,953 links and 10,653
+  issues in 7 min 43 s; `users.db` grew by about 130 MB.
+- JavaScript on native amd64: Chromium rendered a script-built title and
+  followed links that exist only after rendering.
+- Restart mid-crawl, before and after the tini change: the crawl was saved as
+  `paused` and the resume endpoint completed it. The signing key, users and
+  crawls survived restart, backup and restore, and an image update; restore
+  removed an account created after the backup.
+- Retention through the Cloudron scheduler (temporary two-minute schedule in a
+  disposable build): with 90 days nothing was deleted; with
+  `CRAWL_RETENTION_DAYS=1` it deleted only a crawl backdated three days, with
+  all its child rows and no orphans left.
+
+Memory, measured by the cgroup and `docker stats`: idle 50–80 MiB. The
+5,000-page HTML crawl peaked at 1.16 GiB including load and export. The process
+held about 1 GiB until the app restarted, because each session keeps its crawl
+until upstream drops it after an hour idle; crawls from several sites within
+that hour add up. JavaScript added 0.6 GiB with one browser page and 0.9 GiB
+with three (the upstream default) on a small real site. The 2 GiB default
+holds one large HTML crawl at a time, so it stays; README states when to raise it.
+
+The t4 implementation runner was arm64 under emulation, where Chromium could not
+render (QEMU signal 5); native amd64 removed that limitation without any launch
+flag changes. Publication stays disabled until the operator enables it
+explicitly. See [PUBLISHING.md](PUBLISHING.md).

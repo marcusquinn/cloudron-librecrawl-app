@@ -86,4 +86,6 @@ temporary.write_text(revision + '\n')
 os.replace(temporary, marker)
 PY
 chown -R cloudron:cloudron /app/data
-exec gosu cloudron:cloudron /app/code/venv/bin/python main.py --disable-register --disable-guest
+# tini as PID 1 reaps the Chromium helpers orphaned by each JavaScript crawl and
+# forwards SIGTERM, so upstream's shutdown handler still saves live crawls as paused.
+exec /usr/bin/tini -- gosu cloudron:cloudron /app/code/venv/bin/python main.py --disable-register --disable-guest

@@ -9,7 +9,7 @@ ENV PLAYWRIGHT_BROWSERS_PATH=/app/code/ms-playwright \
     PATH=/app/code/bin:/app/code/venv/bin:$PATH
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-venv git ca-certificates \
+    python3 python3-venv git ca-certificates tini \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app/code
 RUN git clone https://github.com/PhialsBasement/LibreCrawl . \
