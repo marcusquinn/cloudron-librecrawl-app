@@ -1,7 +1,7 @@
 {
   "schema": "aidevops.repo-metrics.v1",
   "schema_version": 1,
-  "generated_at": "2026-10-14T21:27:13Z",
+  "generated_at": "2026-10-15T23:42:15Z",
   "tool": {
     "name": "aidevops repo-metrics",
     "version": "1.0.0"
@@ -11,31 +11,58 @@
     "slug": "marcusquinn/cloudron-librecrawl-app"
   },
   "summary": {
-    "source_files": 15,
-    "code": 677,
-    "comments": 32,
-    "blanks": 255,
-    "languages": 3,
+    "source_files": 29,
+    "code": 1397,
+    "comments": 52,
+    "blanks": 342,
+    "languages": 6,
     "dependencies": 0
   },
   "languages": [
     {
       "name": "Markdown",
-      "files": 12,
-      "code": 629,
+      "files": 17,
+      "code": 974,
       "comments": 0,
-      "blanks": 248,
-      "percentage": 92.91,
+      "blanks": 315,
+      "percentage": 69.72,
       "color": "#083fa1"
     },
     {
       "name": "YAML",
-      "files": 2,
-      "code": 37,
-      "comments": 32,
-      "blanks": 7,
-      "percentage": 5.47,
+      "files": 6,
+      "code": 220,
+      "comments": 38,
+      "blanks": 19,
+      "percentage": 15.75,
       "color": "#cb171e"
+    },
+    {
+      "name": "Shell",
+      "files": 3,
+      "code": 130,
+      "comments": 14,
+      "blanks": 6,
+      "percentage": 9.31,
+      "color": "#89e051"
+    },
+    {
+      "name": "JSON",
+      "files": 1,
+      "code": 34,
+      "comments": 0,
+      "blanks": 0,
+      "percentage": 2.43,
+      "color": "#292929"
+    },
+    {
+      "name": "Dockerfile",
+      "files": 1,
+      "code": 28,
+      "comments": 0,
+      "blanks": 2,
+      "percentage": 2.0,
+      "color": "#384d54"
     },
     {
       "name": "SVG",
@@ -43,7 +70,7 @@
       "code": 11,
       "comments": 0,
       "blanks": 0,
-      "percentage": 1.62,
+      "percentage": 0.79,
       "color": "#6e7781"
     }
   ],
