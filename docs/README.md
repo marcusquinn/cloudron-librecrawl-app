@@ -80,8 +80,9 @@ increasing concurrency.
 
 ## Retention
 
-Edit `/app/data/env` in the operator terminal, then restart the app (the
-retention task itself rereads the file at every run):
+Edit `/app/data/env` in the operator terminal. The retention task rereads and
+validates the file at every run, so retention changes need no app restart
+(a restart would pause running crawls):
 
 ```bash
 CRAWL_RETENTION_DAYS=90
