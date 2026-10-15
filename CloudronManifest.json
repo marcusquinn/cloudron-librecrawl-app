@@ -1,0 +1,34 @@
+{
+  "id": "com.marcusquinn.cloudron.librecrawl",
+  "title": "LibreCrawl",
+  "author": "Marcus Quinn <marcus@marcusquinn.com>",
+  "description": "Self-hosted website crawler for SEO audits, with a web interface and REST API. Only trusted, operator-created accounts can sign in. Crawling can reach private networks; do not give access to untrusted users.",
+  "tagline": "Website crawling and SEO audits for trusted teams",
+  "version": "0.1.0",
+  "upstreamVersion": "05a1372",
+  "healthCheckPath": "/login",
+  "httpPort": 5000,
+  "manifestVersion": 2,
+  "website": "https://github.com/PhialsBasement/LibreCrawl",
+  "contactEmail": "marcus@marcusquinn.com",
+  "icon": "file://logo.png",
+  "iconUrl": "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/991a83b/logo.png",
+  "mediaLinks": ["https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/991a83b/media/hero.png"],
+  "minBoxVersion": "9.1.0",
+  "memoryLimit": 2147483648,
+  "addons": {
+    "localstorage": {},
+    "scheduler": {
+      "retention": {
+        "schedule": "0 3 * * *",
+        "command": "/app/code/bin/librecrawl-retention"
+      }
+    }
+  },
+  "tags": ["seo", "crawler", "website", "audit"],
+  "postInstallMessage": "Sign in as `admin`. Read the generated password in the app terminal with `cat /app/data/admin-password`, or use `cloudron exec --app ${CLOUDRON_APP_DOMAIN} -- cat /app/data/admin-password`. Change it after signing in using `librecrawl-user reset-password admin`. See docs/README.md for stdin-based account administration. Registration and guest access are disabled. WARNING: trusted users can crawl private addresses, other apps and the Docker network. Create accounts only for trusted operators and sites.",
+  "configurePath": "/login",
+  "changelog": "file://CHANGELOG",
+  "packagerName": "Marcus Quinn",
+  "packagerUrl": "https://github.com/marcusquinn"
+}

@@ -14,8 +14,34 @@ LibreCrawl self-hosted SEO crawler - Cloudron app package
 
 [LibreCrawl](https://github.com/PhialsBasement/LibreCrawl) on Cloudron: an
 always-on crawler server that WordPress sites running SEO Pro Stats can sign
-in to, crawl themselves on a schedule and import the results. The package is
-in development: see [the package task](todo/tasks/t4-brief.md).
+in to, crawl themselves on a schedule and import the results.
+
+| Component | Baseline |
+| --- | --- |
+| Package | 0.1.0 |
+| LibreCrawl | Commit `05a1372de8334ca18dec0bc1f7470c62901a9418` (MIT) |
+| Cloudron | v9.1.0+ |
+| Memory | 2 GiB; increase for Chromium rendering |
+
+Registration and guest access are disabled. Accounts are created by the
+operator; no Cloudron proxy authentication blocks REST clients. Session signing
+and all database state persist under `/app/data`. A daily retention task removes
+finished crawls older than 90 days by default. Chromium rendering is available
+but disabled by default; Firefox and WebKit are not installed.
+
+**Network warning:** signed-in users can crawl private addresses, other apps
+and the host's Docker network. LibreCrawl has no private-address filter.
+Create accounts only for trusted operators and trusted WordPress sites.
+
+- [Install, sign in and administer accounts](docs/README.md)
+- [Runtime decisions and upstream limitations](docs/PACKAGING-NOTES.md)
+- [Publishing and operator qualification](docs/PUBLISHING.md)
+- [Security policy](SECURITY.md)
+
+Build locally with `docker build --platform linux/amd64 -t librecrawl-cloudron:dev .`.
+Run `bash test/package-test.sh` and the checks in [CONTRIBUTING.md](CONTRIBUTING.md)
+before opening a PR. Image and catalog publication are opt-in operator actions;
+the repository contains no hand-written version catalog.
 
 <!-- aidevops:managed-readme:start -->
 <!-- managed by aidevops; refresh with managed-readme-helper.sh sync -->

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Source only this image-owned helper; operator configuration is literal data.
+load_librecrawl_config() {
+    local config_file="$1"
+    local line key value
+    while IFS= read -r line || [[ -n "$line" ]]; do
+        case "$line" in
+            ''|\#*) continue ;;
+        esac
+        if [[ "$line" != *=* ]]; then
+            printf 'Configuration must use literal KEY=value lines\n' >&2
+            return 1
+        fi
+        key="${line%%=*}"
+        value="${line#*=}"
+        case "$key" in
+            CRAWL_RETENTION_DAYS|CRAWL_VACUUM|LOCAL_MODE|DANGEROUSLY_SKIP_AUTH|DEMO_MODE)
+                export "${key}=${value}"
+                ;;
+            *) printf 'Unsupported configuration key\n' >&2; return 1 ;;
+        esac
+    done < "$config_file"
+    return 0
+}

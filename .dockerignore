@@ -1,0 +1,11 @@
+.git
+.github
+.agents
+todo
+test
+docs
+media
+*.md
+CloudronVersions.json
+.tmp-data
+**/__pycache__

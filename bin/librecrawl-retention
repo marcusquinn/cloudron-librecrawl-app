@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "$(id -u)" == 0 ]]; then
+    exec gosu cloudron:cloudron "$0" "$@"
+fi
+cd /app/code
+# shellcheck disable=SC1091
+source /app/code/bin/librecrawl-config
+load_librecrawl_config /app/data/env
+exec /app/code/venv/bin/python - <<'PY'
+import os
+import sqlite3
+from contextlib import contextmanager
+from src import crawl_db
+
+raw = os.environ.get('CRAWL_RETENTION_DAYS', '90')
+if not raw.isascii() or not raw.isdecimal() or int(raw) > 36500:
+    raise SystemExit('CRAWL_RETENTION_DAYS must be an integer from 0 to 36500')
+days = int(raw)
+vacuum = os.environ.get('CRAWL_VACUUM', 'false').lower()
+if vacuum not in ('true', 'false'):
+    raise SystemExit('CRAWL_VACUUM must be true or false')
+
+@contextmanager
+def cascading_db():
+    # Package-local connection adapter, not a modification to upstream source.
+    with crawl_db_connection() as conn:
+        conn.execute('PRAGMA foreign_keys=ON')
+        if conn.execute('PRAGMA foreign_keys').fetchone()[0] != 1:
+            raise RuntimeError('Cascading deletes unavailable')
+        yield conn
+
+crawl_db_connection = crawl_db.get_db
+crawl_db.get_db = cascading_db
+with cascading_db() as conn:
+    expected = conn.execute("SELECT count(*) FROM crawls WHERE started_at < datetime('now', '-' || ? || ' days') AND status IN ('completed', 'failed', 'stopped')", (days,)).fetchone()[0]
+deleted = crawl_db.cleanup_old_crawls(days)
+if expected and not deleted:
+    raise SystemExit('Retention failed; upstream reported no deletions')
+print('Retention deleted crawls:', deleted)
+if vacuum == 'true':
+    with sqlite3.connect(crawl_db.DB_FILE, timeout=30) as conn:
+        conn.execute('VACUUM')
+    print('Database vacuum completed')
+PY

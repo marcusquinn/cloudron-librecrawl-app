@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+set -euo pipefail
+if [[ "$(id -u)" == 0 ]]; then
+    exec gosu cloudron:cloudron "$0" "$@"
+fi
+cd /app/code
+exec /app/code/venv/bin/python - "$@" 3<&0 <<'PY'
+import argparse
+import getpass
+import json
+import sys
+from src import auth_db
+
+parser = argparse.ArgumentParser(description='Manage trusted LibreCrawl accounts; passwords are read from stdin or the terminal')
+commands = parser.add_subparsers(dest='command', required=True)
+add = commands.add_parser('add')
+add.add_argument('username')
+add.add_argument('email')
+add.add_argument('--tier', choices=['admin', 'extra', 'user'], default='user')
+tier = commands.add_parser('tier')
+tier.add_argument('username')
+tier.add_argument('tier', choices=['admin', 'extra', 'user'])
+reset = commands.add_parser('reset-password')
+reset.add_argument('username')
+commands.add_parser('list')
+args = parser.parse_args()
+
+def password():
+    # Python source occupies stdin; fd 3 preserves the original caller stream.
+    with open(3, closefd=False) as stream:
+        value = getpass.getpass('Password: ') if stream.isatty() else stream.readline().rstrip('\r\n')
+    if not 8 <= len(value.encode('utf-8')) <= 72:
+        parser.error('Password must be 8–72 UTF-8 bytes')
+    return value
+
+if args.command == 'list':
+    with auth_db.get_db() as conn:
+        print(json.dumps([dict(row) for row in conn.execute('SELECT username, email, tier, verified FROM users ORDER BY username')], indent=2))
+elif args.command == 'add':
+    with auth_db.get_db() as conn:
+        existing = conn.execute('SELECT id FROM users WHERE username = ? OR email = ?', (args.username, args.email)).fetchone()
+    if existing:
+        parser.error('Username or email already exists; use reset-password or tier')
+    ok, message, user_id = auth_db.create_user(args.username, args.email, password())
+    if not ok or not auth_db.verify_user(user_id)[0] or not auth_db.set_user_tier(user_id, args.tier)[0]:
+        sys.exit('Account creation failed')
+    print('Created verified account:', args.username)
+else:
+    with auth_db.get_db() as conn:
+        user = conn.execute('SELECT id FROM users WHERE username = ?', (args.username,)).fetchone()
+    if user is None:
+        parser.error('Unknown username')
+    if args.command == 'tier':
+        if not auth_db.set_user_tier(user['id'], args.tier)[0]:
+            sys.exit('Tier update failed')
+    else:
+        # Upstream exposes hash_password but no password-reset function.
+        hashed = auth_db.hash_password(password())
+        with auth_db.get_db() as conn:
+            conn.execute('UPDATE users SET password_hash = ? WHERE id = ?', (hashed, user['id']))
+    print('Updated account:', args.username)
+PY
