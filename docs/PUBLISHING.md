@@ -49,8 +49,9 @@ and main source ref as in CI. The workflow uses digest-pinned image references.
 
 - Configure `CLOUDRON_RELEASE_PAT`, publication opt-in, and public GHCR visibility.
 - Install at **librecrawl-test**, never a production target for qualification.
-  For an unpublished local image, use `cloudron install --location
-  librecrawl-test --image <built-image>` with a registry reachable by Cloudron.
+  For an unpublished package, run `cloudron install --location librecrawl-test`
+  from a checkout: Cloudron builds the image on the server, so no registry is
+  needed. `cloudron update --app librecrawl-test` rebuilds after changes.
 - Confirm TLS, health, first sign-in, trusted service-account creation and the
   plugin login/crawl/list/load/CSV path. Test Chromium separately with adequate RAM.
 - Restart and confirm the same cookie and saved crawl work; confirm registration,
@@ -60,5 +61,5 @@ and main source ref as in CI. The workflow uses digest-pinned image references.
 - Back up, restore to a disposable app, and re-check users, settings, sessions,
   saved crawls and exports. Exercise retention with child rows on disposable data.
 - Record real Cloudron version and image digest, then submit the package to
-  Community Apps using its generated version catalog and artwork. No live
-  installation or Community Apps submission occurs during this implementation.
+  Community Apps using its generated version catalog and artwork. Results of
+  the local-build qualification are in [PACKAGING-NOTES.md](PACKAGING-NOTES.md).

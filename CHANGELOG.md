@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Run LibreCrawl under tini, so the Chromium helper processes each JavaScript
+  crawl leaves behind are reaped instead of accumulating as zombies.
+
+### Changed
+
+- Document the live Cloudron qualification: memory sizing, restart and resume,
+  scheduled retention, and upstream crawl behaviour that clients must allow for.
+
 ## [0.1.0] - 2026-10-14
 
 ### Added
