@@ -22,6 +22,7 @@ jobs:
       contents: read
     outputs:
       publish: ${{ steps.decide.outputs.publish }}
+      reconcile: ${{ steps.decide.outputs.reconcile }}
       version: ${{ steps.decide.outputs.version }}
       source: ${{ steps.decide.outputs.source }}
     steps:
@@ -41,13 +42,17 @@ jobs:
           version="$(jq -r .version CloudronManifest.json)"
           printf 'version=%s\nsource=%s\n' "$version" "$GITHUB_SHA" >> "$GITHUB_OUTPUT"
           publish=false
+          reconcile=false
           # aidevops:trust-boundary — PRs only validate; publication needs explicit operator opt-in.
           if [[ "$GITHUB_EVENT_NAME" != pull_request && "$GITHUB_REF" == refs/heads/main && "$PUBLICATION_ENABLED" == true ]]; then
             if [[ ! -f CloudronVersions.json ]] || ! jq -e --arg version "$version" '.versions[$version] != null' CloudronVersions.json >/dev/null; then
               publish=true
+            else
+              # A published version is never rebuilt; only a missing GitHub release is repaired.
+              reconcile=true
             fi
           fi
-          printf 'publish=%s\n' "$publish" >> "$GITHUB_OUTPUT"
+          printf 'publish=%s\nreconcile=%s\n' "$publish" "$reconcile" >> "$GITHUB_OUTPUT"
 
   build:
     needs: preflight
@@ -152,3 +157,26 @@ jobs:
           # aidevops:trust-boundary — scoped release credential is used only after validation.
           gh auth setup-git
           git push --atomic origin HEAD:main "v${VERSION}"
+
+  # The tag above sits on a [skip ci] commit, so tag-push workflows (including
+  # cloudron-package-release.yml) never run for it. This job creates the
+  # release after publication and, on later main runs, repairs a missing one.
+  release:
+    needs: [preflight, publish]
+    if: ${{ !cancelled() && !failure() && (needs.preflight.outputs.publish == 'true' || needs.preflight.outputs.reconcile == 'true') }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      attestations: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ needs.preflight.outputs.source }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - name: Create or repair the GitHub release from the verified tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.preflight.outputs.version }}
+        run: bash scripts/create-github-release.sh "$VERSION"

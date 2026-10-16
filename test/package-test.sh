@@ -21,11 +21,13 @@ for file in CHANGELOG DESCRIPTION.md POSTINSTALL.md logo.png media/hero.png docs
 done
 # Store metadata comes from these files; listing images must be public HTTPS URLs.
 jq -e '.description == "file://DESCRIPTION.md" and .postInstallMessage == "file://POSTINSTALL.md" and (.mediaLinks | length > 0 and all(startswith("https://")))' CloudronManifest.json >/dev/null
-# Catalog is deliberately absent until the authorized CLI publication runs.
+# Only the authorized CLI publication writes the catalog; never hand-edit it.
 if [[ -f CloudronVersions.json ]]; then
     jq -e '.versions | type == "object"' CloudronVersions.json >/dev/null
 fi
-for script in start.sh bin/librecrawl-user bin/librecrawl-retention bin/librecrawl-config scripts/publish-cloudron-catalog.sh; do
+# The tag sits on a [skip ci] commit, so the catalog workflow creates releases.
+grep -Fq 'scripts/create-github-release.sh' .github/workflows/cloudron-catalog-publish.yml
+for script in start.sh bin/librecrawl-user bin/librecrawl-retention bin/librecrawl-config scripts/publish-cloudron-catalog.sh scripts/create-github-release.sh; do
     bash -n "$script"
 done
 printf 'Package static checks passed\n'
