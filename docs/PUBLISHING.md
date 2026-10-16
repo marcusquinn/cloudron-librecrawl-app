@@ -45,6 +45,12 @@ external failure. Published versions are not rebuilt: a later run on main only
 creates the current version's GitHub release if it is missing. Never
 force-push publication history.
 
+Only the catalog commit may carry a skip-CI marker. GitHub skips push and
+pull request runs when the head commit message contains one anywhere, body
+included, so describe it in prose in commit messages, PR descriptions and
+squash bodies. A merge to main whose message quotes it skips the run that
+creates or repairs the GitHub release.
+
 Verify image provenance with `gh attestation verify oci://<immutable-image> --repo
 marcusquinn/cloudron-librecrawl-app`. Verify the downloaded generated catalog
 with `gh attestation verify CloudronVersions.json --repo
