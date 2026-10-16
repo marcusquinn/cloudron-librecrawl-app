@@ -16,9 +16,11 @@ grep -Fq 'LOCAL_MODE DANGEROUSLY_SKIP_AUTH DEMO_MODE' start.sh
 grep -Fq 'PRAGMA foreign_keys=ON' bin/librecrawl-retention
 grep -Fq 'cleanup_old_crawls(days)' bin/librecrawl-retention
 grep -Fq 'CLOUDRON_PUBLICATION_ENABLED' .github/workflows/cloudron-catalog-publish.yml
-for file in CHANGELOG logo.png media/hero.png docs/README.md docs/PACKAGING-NOTES.md docs/PUBLISHING.md DESIGN.md; do
+for file in CHANGELOG DESCRIPTION.md POSTINSTALL.md logo.png media/hero.png docs/README.md docs/PACKAGING-NOTES.md docs/PUBLISHING.md DESIGN.md; do
     test -s "$file"
 done
+# Store metadata comes from these files; listing images must be public HTTPS URLs.
+jq -e '.description == "file://DESCRIPTION.md" and .postInstallMessage == "file://POSTINSTALL.md" and (.mediaLinks | length > 0 and all(startswith("https://")))' CloudronManifest.json >/dev/null
 # Catalog is deliberately absent until the authorized CLI publication runs.
 if [[ -f CloudronVersions.json ]]; then
     jq -e '.versions | type == "object"' CloudronVersions.json >/dev/null

@@ -45,6 +45,24 @@ with `gh attestation verify CloudronVersions.json --repo
 marcusquinn/cloudron-librecrawl-app`; require this repository's catalog workflow
 and main source ref as in CI. The workflow uses digest-pinned image references.
 
+## Store listing
+
+The catalog URL is
+`https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/main/CloudronVersions.json`.
+The CLI copies the manifest into each catalog entry, so a listing shows
+`DESCRIPTION.md`, `POSTINSTALL.md`, that version's `[X.Y.Z]` section of
+`CHANGELOG`, the icon and `mediaLinks` as they were when it was published.
+Keep `iconUrl` and `mediaLinks` pinned to a commit so published entries never
+change; [DESIGN.md](../DESIGN.md) records how the slides were made and
+reviewed. Before release, check that each URL returns HTTPS 200 with an image
+content type.
+
+To list the app on [Community Apps](https://ca.cloudron.io), sign in, add the
+catalog URL to your apps, and confirm the imported title, icon, screenshots,
+changelog and install URL. Announce new packages in the forum's
+[Community Apps](https://forum.cloudron.io/category/220/community-apps)
+category.
+
 ## Operator hand-off (t5)
 
 - Configure `CLOUDRON_RELEASE_PAT`, publication opt-in, and public GHCR visibility.

@@ -7,17 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Fixed
-
-- Run LibreCrawl under tini, so the Chromium helper processes each JavaScript
-  crawl leaves behind are reaped instead of accumulating as zombies.
-
-### Changed
-
-- Document the live Cloudron qualification: memory sizing, restart and resume,
-  scheduled retention, and upstream crawl behaviour that clients must allow for.
-
-## [0.1.0] - 2026-10-14
+## [0.1.0] - 2026-10-16
 
 ### Added
 
@@ -26,3 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Persistent session signing, SQLite state and pre-upgrade snapshots.
 - Daily configurable retention with cascading child deletion and opt-in vacuum.
 - Chromium-only rendering, publishing workflows and operator documentation.
+- LibreCrawl runs under tini, so the Chromium helper processes each JavaScript
+  crawl leaves behind are reaped instead of accumulating as zombies.
+- Live Cloudron qualification notes: memory sizing, restart and resume,
+  scheduled retention, and upstream crawl behaviour that clients must allow for.
+- App store description, post-install guide, documentation and licence links,
+  and five listing screenshots.

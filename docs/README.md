@@ -2,10 +2,14 @@
 
 ## Install and first sign-in
 
-Requires Cloudron 9.1.0 or newer. Use the locally built image while qualifying
-the package; use the immutable published image/catalog only after publication.
-See [PUBLISHING.md](PUBLISHING.md). Cloudron handles public HTTPS; the app
-serves HTTP on port 5000 internally. There is no Cloudron SSO or proxy-auth wall.
+Requires Cloudron 9.1.0 or newer. Add the version catalog
+`https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/main/CloudronVersions.json`
+under **Community apps** in the dashboard, or run
+`cloudron install --location <subdomain> --versions-url <catalog URL>`. New
+versions then appear as updates in the dashboard. To qualify an unpublished
+change, install from a checkout instead (see [PUBLISHING.md](PUBLISHING.md)).
+Cloudron handles public HTTPS; the app serves HTTP on port 5000 internally.
+There is no Cloudron SSO or proxy-auth wall.
 
 Read the initial password privately in the app terminal:
 
