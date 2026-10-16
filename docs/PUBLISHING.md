@@ -33,10 +33,12 @@ paste it into an issue. GHCR image pushes use the workflow's `GITHUB_TOKEN`.
 7. The workflow's release job creates the GitHub release from the tag after
    checking that the tag is on main, its catalog pins a published digest that
    pulls anonymously, and the catalog carries this workflow's main-branch
-   provenance. The catalog commit carries `[skip ci]`, so tag-push workflows,
-   including the aidevops `cloudron-package-release.yml` caller, do not run for
-   it. Existing catalog versions are never overwritten; use revoke/new version
-   for rollback.
+   provenance. Its notes are the version's `CHANGELOG` entries: a missing or
+   empty section fails the job, as does a draft release for the tag (publish or
+   delete the draft, then rerun). The catalog commit carries `[skip ci]`, so
+   tag-push workflows, including the aidevops `cloudron-package-release.yml`
+   caller, do not run for it. Existing catalog versions are never overwritten;
+   use revoke/new version for rollback.
 
 If generation/attestation/push fails, no catalog is published by that failed
 step. A pushed GHCR image without a catalog is a recoverable intermediate state,

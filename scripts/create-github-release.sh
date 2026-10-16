@@ -28,8 +28,12 @@ release_notes() {
     local upstream
     upstream="$(git show "${tag}:CloudronManifest.json" | jq -r .upstreamVersion)" || return 1
     printf 'Cloudron package %s for LibreCrawl commit %s.\n\n' "$version" "$upstream"
-    git show "${tag}:CHANGELOG" |
-        awk -v heading="[${version}]" '$0 == heading { found = 1; next } found && /^\[/ { exit } found' || return 1
+    # Fail when the version has no entries: a release created without them is
+    # never repaired. Read to EOF, so pipefail never sees git show get SIGPIPE.
+    git show "${tag}:CHANGELOG" | awk -v heading="[${version}]" '
+        /^\[/ { inside = ($0 == heading); next }
+        inside { print; if (NF) entries++ }
+        END { exit !entries }' || return 1
     return 0
 }
 
@@ -37,7 +41,7 @@ main() {
     local version="${1:-}"
     local repo="${GITHUB_REPOSITORY:-marcusquinn/cloudron-librecrawl-app}"
     local tag="v${version}"
-    local catalog image notes
+    local catalog image notes draft
     [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || fail "Usage: ${0##*/} <x.y.z>" || return 1
     # The catalog workflow pushes main and the tag atomically.
     git rev-parse -q --verify "refs/tags/${tag}^{commit}" >/dev/null || fail "Tag ${tag} not found" || return 1
@@ -53,7 +57,10 @@ main() {
     docker buildx imagetools inspect "$image" >/dev/null || fail "Image ${image} is not pullable" || return 1
     gh attestation verify "$catalog" --repo "$repo" --signer-workflow "${repo}/${SIGNER_WORKFLOW}" \
         --source-ref refs/heads/main >/dev/null || fail "Catalog at ${tag} lacks main-branch provenance" || return 1
-    if gh release view "$tag" --repo "$repo" >/dev/null 2>&1; then
+    # gh also finds drafts by tag; this script never creates one, so a draft
+    # needs an operator to review it rather than counting as published.
+    if draft="$(gh release view "$tag" --repo "$repo" --json isDraft --jq .isDraft 2>/dev/null)"; then
+        [[ "$draft" == false ]] || fail "GitHub release ${tag} is a draft; publish or delete it, then rerun" || return 1
         printf 'GitHub release %s already exists\n' "$tag"
         return 0
     fi
