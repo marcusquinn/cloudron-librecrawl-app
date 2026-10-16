@@ -32,8 +32,9 @@ with a connection adapter that enables foreign keys, then calls upstream
 same transaction. It refuses invalid days/vacuum values and reports failure if
 eligible rows exist but upstream returns zero. Regular upstream UI/API deletion
 still has the orphan-row defect: the package deliberately does not patch it or
-delete unrelated orphan rows. Follow-up: propose enabling foreign keys on every
-upstream connection and test both scheduled cleanup and interactive deletion.
+delete unrelated orphan rows. Reported upstream as
+[PhialsBasement/LibreCrawl#109](https://github.com/PhialsBasement/LibreCrawl/issues/109),
+with enabling foreign keys on every connection as the suggested fix.
 
 Cleanup uses `started_at`, with statuses completed/failed/stopped. The task does
 not remove paused/running crawls or authentication/settings history. Retention
@@ -71,7 +72,8 @@ the crawl as `paused`.
 - `crawlDelay` only throttles JavaScript crawls: the HTML crawl path never calls
   the rate limiter. On the live test, 15 pages with a 5-second delay finished in
   about a second. `concurrency` plus up to five HEAD-check workers is the only
-  limit. Follow-up: propose applying the rate limiter to the HTML path upstream.
+  limit. Reported upstream as
+  [PhialsBasement/LibreCrawl#110](https://github.com/PhialsBasement/LibreCrawl/issues/110).
 - JavaScript crawls send `jsUserAgent` (default `LibreCrawl/1.0 (Web Crawler
   with JavaScript)`), not `userAgent`. A WAF-protected WordPress site answered
   403 to the default and 200 once the client set both.
@@ -80,6 +82,10 @@ the crawl as `paused`.
 - Links exports are slow to generate: inside the container, that crawl's
   397,953-row links CSV (49.5 MB) took 22.8 s, against 0.6 s for the 2.4 MB URL
   CSV. Clients need about a minute of export timeout for sites this size.
+- Sitemap discovery requests each robots.txt `Sitemap:` value as written, so a
+  relative one such as `/sitemap-news.xml` fails and its URLs are not
+  discovered; full URLs work. Proposed upstream as
+  [PhialsBasement/LibreCrawl#111](https://github.com/PhialsBasement/LibreCrawl/issues/111).
 
 ## Network security follow-up
 
@@ -126,5 +132,13 @@ holds one large HTML crawl at a time, so it stays; README states when to raise i
 
 The t4 implementation runner was arm64 under emulation, where Chromium could not
 render (QEMU signal 5); native amd64 removed that limitation without any launch
-flag changes. Publication stays disabled until the operator enables it
-explicitly. See [PUBLISHING.md](PUBLISHING.md).
+flag changes. The operator enabled publication, and 0.1.0 is published. See
+[PUBLISHING.md](PUBLISHING.md).
+
+On 2026-10-16 the production crawler moved to a catalog install of 0.1.0
+(`cloudron install --versions-url`, the image digest listed in
+`CloudronVersions.json`), so it receives catalog updates. One SEO Pro Stats
+1.12.1 site moved to it with its own admin-tier account and kept its settings
+and weekly schedule. Its first **Crawl now** fetched 1,148 addresses in 3 min
+12 s; the site's cron imported 148 pages and 987 links 10 minutes after the
+start.
