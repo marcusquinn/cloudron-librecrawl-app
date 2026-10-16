@@ -30,14 +30,20 @@ paste it into an issue. GHCR image pushes use the workflow's `GITHUB_TOKEN`.
 6. The workflow attests/verifies the catalog, commits only the generated file,
    and atomically pushes main plus the version tag. Concurrent main changes
    cause push rejection rather than an overwrite; rerun from the new main.
-7. The unchanged aidevops tag caller creates the GitHub release. Existing
-   catalog versions are never overwritten; use revoke/new version for rollback.
+7. The workflow's release job creates the GitHub release from the tag after
+   checking that the tag is on main, its catalog pins a published digest that
+   pulls anonymously, and the catalog carries this workflow's main-branch
+   provenance. The catalog commit carries `[skip ci]`, so tag-push workflows,
+   including the aidevops `cloudron-package-release.yml` caller, do not run for
+   it. Existing catalog versions are never overwritten; use revoke/new version
+   for rollback.
 
 If generation/attestation/push fails, no catalog is published by that failed
 step. A pushed GHCR image without a catalog is a recoverable intermediate state,
 not an installable release. Re-run from the same trusted main after resolving the
-external failure. Already-generated versions are skipped; release callers can
-be rerun if a tagged release failed. Never force-push publication history.
+external failure. Published versions are not rebuilt: a later run on main only
+creates the current version's GitHub release if it is missing. Never
+force-push publication history.
 
 Verify image provenance with `gh attestation verify oci://<immutable-image> --repo
 marcusquinn/cloudron-librecrawl-app`. Verify the downloaded generated catalog
@@ -70,8 +76,9 @@ category.
   For an unpublished package, run `cloudron install --location librecrawl-test`
   from a checkout: Cloudron builds the image on the server, so no registry is
   needed. `cloudron update --app librecrawl-test` rebuilds after changes.
-- Confirm TLS, health, first sign-in, trusted service-account creation and the
-  plugin login/crawl/list/load/CSV path. Test Chromium separately with adequate RAM.
+- Confirm TLS, health, first sign-in, trusted service-account creation and
+  the plugin login/crawl/list/load/CSV path. Test Chromium separately with
+  adequate RAM.
 - Restart and confirm the same cookie and saved crawl work; confirm registration,
   guest and unsafe modes stay disabled.
 - Upgrade from a qualified earlier image; confirm settings/users/crawls and the
