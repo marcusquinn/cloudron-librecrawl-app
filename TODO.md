@@ -67,8 +67,6 @@ Format: `- [ ] tN Description @owner #tag ~estimate risk:level logged:date`
 
 ## Backlog
 
-- [ ] t5 Qualify the LibreCrawl package on Cloudron, connect SEO Pro Stats sites, submit to Community Apps #ops #cloudron #interactive ~2h blocked-by:t4 ref:GH#2 logged:2026-10-14 -> [todo/tasks/t5-brief.md]
-
 <!--TOON:backlog[0]{id,desc,owner,tags,est,risk,logged,status}:
 -->
 
@@ -87,6 +85,7 @@ Format: `- [ ] tN Description @owner #tag ~estimate risk:level logged:date`
 ## Done
 
 - [x] t4 Package LibreCrawl as a Cloudron app (crawler server for SEO Pro Stats and aidevops) #feature #cloudron #interactive #auto-dispatch ~6h tier:standard ref:GH#1 logged:2026-10-14 -> [todo/tasks/t4-brief.md] pr:#4 testing:runtime-verified completed:2026-10-16
+- [x] t5 Qualify the LibreCrawl package on Cloudron, connect SEO Pro Stats sites, submit to Community Apps #ops #cloudron #interactive ~2h blocked-by:t4 ref:GH#2 logged:2026-10-14 -> [todo/tasks/t5-brief.md] pr:#13 testing:runtime-verified completed:2026-10-17
 <!--TOON:done[0]{id,desc,owner,tags,est,actual,logged,started,completed,status}:
 -->
 
