@@ -30,6 +30,10 @@ crawl private/internal addresses and other apps. Use a separate account per site
 An `admin` tier gives the plugin unrestricted settings/crawls; it is not
 Cloudron platform administration.
 
+A copy of a connected site (a clone or a staging copy) keeps the source site's
+crawler connection. Disconnect it on the copy (Settings → Connections →
+Crawler), then connect the copy with its own account.
+
 In the app terminal:
 
 ```bash

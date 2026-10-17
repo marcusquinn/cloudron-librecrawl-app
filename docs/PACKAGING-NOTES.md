@@ -142,3 +142,13 @@ On 2026-10-16 the production crawler moved to a catalog install of 0.1.0
 and weekly schedule. Its first **Crawl now** fetched 1,148 addresses in 3 min
 12 s; the site's cron imported 148 pages and 987 links 10 minutes after the
 start.
+
+On 2026-10-17 the first scheduled crawls on the catalog install ran and were
+imported with nobody starting them: 148 pages and 985 links on that site, and
+63 pages and 318 links on another. Twelve SEO Pro Stats sites now use the
+production crawler. Each has its own admin-tier account and crawls weekly. The
+plugin sets each site's slot from its host. These twelve fall on different
+hours, at least two hours apart, so no two of their crawls should be held in
+memory at once. The on-server-build test app was then uninstalled. The
+checklist's catalog-to-catalog update waits for a second published version;
+the production install is catalog-linked, so that update is the check.
