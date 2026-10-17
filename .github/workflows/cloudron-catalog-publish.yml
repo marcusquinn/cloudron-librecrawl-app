@@ -33,6 +33,32 @@ jobs:
         run: |
           bash test/package-test.sh
           shellcheck start.sh bin/librecrawl-user bin/librecrawl-retention scripts/*.sh test/*.sh
+      - name: Install pinned Cloudron CLI
+        run: |
+          set -euo pipefail
+          registry_integrity="$(npm view "cloudron@${CLOUDRON_CLI_VERSION}" dist.integrity)"
+          test "${registry_integrity}" = "${CLOUDRON_CLI_INTEGRITY}"
+          npm install --global --ignore-scripts "cloudron@${CLOUDRON_CLI_VERSION}"
+          test "$(cloudron --version)" = "${CLOUDRON_CLI_VERSION}"
+      - name: Dry-run catalog entry with the real Cloudron CLI
+        # Runs the real manifest and file:// reference parsing on a scratch
+        # copy of the catalog so errors fail the PR, not publication.
+        run: |
+          set -euo pipefail
+          scratch="${RUNNER_TEMP}/catalog-dry-run"
+          mkdir -p "${scratch}"
+          cp CloudronManifest.json CloudronVersions.json "${scratch}/"
+          jq -r '.. | strings | select(startswith("file://")) | ltrimstr("file://")' CloudronManifest.json |
+            while IFS= read -r referenced; do cp "${referenced}" "${scratch}/"; done
+          cd "${scratch}"
+          version="$(jq -r '.version' CloudronManifest.json)"
+          if jq -e --arg version "${version}" '.versions[$version] != null' CloudronVersions.json >/dev/null; then
+            printf 'Version %s is already published; skipping dry run\n' "${version}"
+            exit 0
+          fi
+          cloudron versions add --state testing --image "registry.invalid/dry-run@sha256:$(printf '0%.0s' $(seq 64))"
+          cloudron versions verify
+          jq -e --arg version "${version}" '.versions[$version].manifest.changelog | length > 0' CloudronVersions.json >/dev/null
       - name: Decide whether publication is authorized and needed
         id: decide
         env:
