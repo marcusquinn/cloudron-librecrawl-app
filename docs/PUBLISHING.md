@@ -39,6 +39,15 @@ paste it into an issue. GHCR image pushes use the workflow's `GITHUB_TOKEN`.
    tag-push workflows, including the aidevops `cloudron-package-release.yml`
    caller, do not run for it. Existing catalog versions are never overwritten;
    use revoke/new version for rollback.
+8. Update the production install, which is linked to this catalog, to the new
+   version. Confirm it is healthy, that users, settings, saved crawls and the
+   signing key persist, and that a connected SEO Pro Stats site still reports
+   `crawler ok` from `wp seoprostats doctor`. If the release moves the upstream
+   commit pin, also confirm `start.sh` wrote the pre-upgrade snapshot
+   `/app/data/users.db.bak-<previous commit>`; it writes none when the pin is
+   unchanged. Production was installed from the catalog at 0.1.0, so the first
+   such update is also the first catalog-to-catalog update check. Record the
+   result in [PACKAGING-NOTES.md](PACKAGING-NOTES.md).
 
 If generation/attestation/push fails, no catalog is published by that failed
 step. A pushed GHCR image without a catalog is a recoverable intermediate state,

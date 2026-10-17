@@ -151,4 +151,5 @@ plugin sets each site's slot from its host. These twelve fall on different
 hours, at least two hours apart, so no two of their crawls should be held in
 memory at once. The on-server-build test app was then uninstalled. The
 checklist's catalog-to-catalog update waits for a second published version;
-the production install is catalog-linked, so that update is the check.
+the production install is catalog-linked, so that update is the check (step 8
+of the pipeline in [PUBLISHING.md](PUBLISHING.md)).
