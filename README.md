@@ -2,8 +2,8 @@
 
 <!-- aidevops:badges:start -->
 <!-- managed by aidevops badges; edit the template, not this block -->
-[![GitHub Actions](https://github.com/marcusquinn/cloudron-librecrawl-app/actions/workflows/loc-badge.yml/badge.svg?branch=main)](https://github.com/marcusquinn/cloudron-librecrawl-app/actions/workflows/loc-badge.yml)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/marcusquinn/cloudron-librecrawl-app/blob/main/LICENSE)
+[![Latest release](https://img.shields.io/badge/release-latest-blue.svg)](https://github.com/marcusquinn/cloudron-librecrawl-app/releases/latest)
 
 [![Lines of code](docs/metrics/badges/loc.svg)](docs/metrics/repo-metrics.md)
 [![Dependencies](docs/metrics/badges/dependencies.svg)](docs/metrics/repo-metrics.md)
