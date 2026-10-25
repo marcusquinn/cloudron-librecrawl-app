@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Pin the package to Cloudron base 6.0.1, including the patched CA bundle
+  and shared MIME data, and align the package static check with its digest.
 - The catalog workflow creates each version's GitHub release itself, after
   verifying the tag, image and catalog provenance. The version tag sits on a
   `[skip ci]` commit, which tag-push workflows ignore; later runs on main
