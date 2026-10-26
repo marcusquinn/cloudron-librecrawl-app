@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Use the pinned aidevops reusable catalog publisher, preserving package checks,
+  the image repository and Cloudron CLI pin while adding PR image builds and
+  guarded publication retries when main advances with documentation changes.
+
 ### Fixed
 
 - Pin the package to Cloudron base 6.0.1, including the patched CA bundle
