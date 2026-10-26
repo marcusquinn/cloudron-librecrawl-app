@@ -15,7 +15,12 @@ fi
 grep -Fq 'LOCAL_MODE DANGEROUSLY_SKIP_AUTH DEMO_MODE' start.sh
 grep -Fq 'PRAGMA foreign_keys=ON' bin/librecrawl-retention
 grep -Fq 'cleanup_old_crawls(days)' bin/librecrawl-retention
-grep -Fq 'CLOUDRON_PUBLICATION_ENABLED' .github/workflows/cloudron-catalog-publish.yml
+# Publication opt-in, catalog dry-run and release creation live in the pinned
+# reusable workflow; the caller must bind its helper policy to that same SHA.
+workflow=.github/workflows/cloudron-catalog-publish.yml
+publisher_ref="$(sed -nE 's|^    uses: marcusquinn/aidevops/\.github/workflows/cloudron-catalog-publish-reusable\.yml@([0-9a-f]{40})$|\1|p' "$workflow")"
+test -n "$publisher_ref"
+grep -Fxq "      aidevops_ref: $publisher_ref" "$workflow"
 for file in CHANGELOG DESCRIPTION.md POSTINSTALL.md logo.png media/hero.png docs/README.md docs/PACKAGING-NOTES.md docs/PUBLISHING.md DESIGN.md; do
     test -s "$file"
 done
@@ -25,8 +30,9 @@ jq -e '.description == "file://DESCRIPTION.md" and .postInstallMessage == "file:
 if [[ -f CloudronVersions.json ]]; then
     jq -e '.versions | type == "object"' CloudronVersions.json >/dev/null
 fi
-# The tag sits on a [skip ci] commit, so the catalog workflow creates releases.
-grep -Fq 'scripts/create-github-release.sh' .github/workflows/cloudron-catalog-publish.yml
+# Keep the package-specific checks wired into the reusable preflight.
+grep -Fxq '        bash test/package-test.sh' "$workflow"
+grep -Fxq '        shellcheck start.sh bin/librecrawl-user bin/librecrawl-retention scripts/*.sh test/*.sh' "$workflow"
 for script in start.sh bin/librecrawl-user bin/librecrawl-retention bin/librecrawl-config scripts/publish-cloudron-catalog.sh scripts/create-github-release.sh; do
     bash -n "$script"
 done
