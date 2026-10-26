@@ -1,3 +1,6 @@
+[0.1.1]
+* Security update: move to the digest-pinned Cloudron base image 6.0.1 with its patched CA bundle and shared MIME data. LibreCrawl stays at commit 05a1372.
+
 [0.1.0]
 * Initial Cloudron package for LibreCrawl commit 05a1372.
 * Signed-in-only access with operator-managed accounts and persistent sessions.

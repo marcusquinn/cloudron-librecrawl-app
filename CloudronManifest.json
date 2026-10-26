@@ -4,7 +4,7 @@
   "author": "Marcus Quinn <marcus@marcusquinn.com>",
   "description": "file://DESCRIPTION.md",
   "tagline": "Website crawling and SEO audits for trusted teams",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "upstreamVersion": "05a1372",
   "healthCheckPath": "/login",
   "httpPort": 5000,
