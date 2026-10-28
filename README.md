@@ -35,7 +35,7 @@ Then follow the post-install message to sign in, and read the
 
 | Component | Baseline |
 | --- | --- |
-| Package | 0.1.0 |
+| Package | 0.1.1 |
 | LibreCrawl | Commit `05a1372de8334ca18dec0bc1f7470c62901a9418` (MIT) |
 | Cloudron | v9.1.0+ |
 | Memory | 2 GiB; increase for Chromium rendering |
