@@ -57,6 +57,63 @@
             "creationDate": "Fri, 16 Oct 2026 02:00:28 GMT",
             "ts": "Fri, 16 Oct 2026 02:00:28 GMT",
             "publishState": "published"
+        },
+        "0.1.1": {
+            "manifest": {
+                "id": "com.marcusquinn.cloudron.librecrawl",
+                "title": "LibreCrawl",
+                "author": "Marcus Quinn <marcus@marcusquinn.com>",
+                "description": "LibreCrawl is a self-hosted website crawler for SEO audits. Crawl sites from\nyour own server, review the results in a web interface, and export them or\ndrive crawls through the REST API.\n\n### Features\n\n* **Page audit:** status code, title, meta description, headings, word count,\n  response time, OpenGraph and Twitter tags, and JSON-LD structured data for\n  every URL.\n* **Issues:** errors and warnings from SEO, content, performance,\n  accessibility, indexability and duplicate-content checks.\n* **Links:** internal and external links with their status codes, anchor text\n  and placement (navigation, body or footer).\n* **Site structure:** an interactive graph of the links between pages,\n  coloured by response status.\n* **History and export:** saved crawls you can reload, with exports to CSV,\n  Excel, JSON or XML.\n* **JavaScript rendering:** optional Chromium rendering for sites that build\n  their pages in the browser. Off by default.\n\n### This package\n\n* Only accounts created by the operator can sign in. Registration and guest\n  access are disabled.\n* Users, settings and crawls are stored in SQLite under `/app/data` and\n  included in Cloudron backups. The database is snapshotted before a new\n  LibreCrawl version migrates it.\n* A daily task removes finished crawls older than 90 days. The period can be\n  changed.\n* Memory defaults to 2 GiB, enough for one large HTML crawl at a time. Allow\n  4 GiB for several large crawls in the same hour, or for JavaScript rendering\n  beyond small sites.\n\n**Security:** anyone who can sign in can make the server crawl any address it\ncan reach, including private networks and other apps on this Cloudron. Create\naccounts only for people and sites you trust.\n\n[LibreCrawl](https://github.com/PhialsBasement/LibreCrawl) is open source under\nthe MIT licence. This package is maintained independently of the LibreCrawl\nproject.\n",
+                "tagline": "Website crawling and SEO audits for trusted teams",
+                "version": "0.1.1",
+                "upstreamVersion": "05a1372",
+                "healthCheckPath": "/login",
+                "httpPort": 5000,
+                "manifestVersion": 2,
+                "website": "https://github.com/PhialsBasement/LibreCrawl",
+                "contactEmail": "marcus@marcusquinn.com",
+                "icon": "file://logo.png",
+                "iconUrl": "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/991a83b/logo.png",
+                "mediaLinks": [
+                    "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/5afedf0/media/listing-1-audit.png",
+                    "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/5afedf0/media/listing-2-issues.png",
+                    "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/5afedf0/media/listing-3-links.png",
+                    "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/5afedf0/media/listing-4-structure.png",
+                    "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/5afedf0/media/listing-5-history.png",
+                    "https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/991a83b/media/hero.png"
+                ],
+                "documentationUrl": "https://github.com/marcusquinn/cloudron-librecrawl-app/blob/main/docs/README.md",
+                "upstreamLicense": {
+                    "name": "MIT",
+                    "url": "https://github.com/PhialsBasement/LibreCrawl/blob/05a1372de8334ca18dec0bc1f7470c62901a9418/LICENSE"
+                },
+                "minBoxVersion": "9.1.0",
+                "memoryLimit": 2147483648,
+                "addons": {
+                    "localstorage": {},
+                    "scheduler": {
+                        "retention": {
+                            "schedule": "0 3 * * *",
+                            "command": "/app/code/bin/librecrawl-retention"
+                        }
+                    }
+                },
+                "tags": [
+                    "seo",
+                    "crawler",
+                    "website",
+                    "audit"
+                ],
+                "postInstallMessage": "Sign in as `admin`. The generated password is in `/app/data/admin-password`:\nread it in the app's Terminal with `cat /app/data/admin-password`, or run\n`cloudron exec --app $CLOUDRON-APP-FQDN -- cat /app/data/admin-password`.\n\nAfter signing in, set a new password in the Terminal with\n`librecrawl-user reset-password admin`, then delete `/app/data/admin-password`.\n\nRegistration and guest access are disabled. Create an account for each person\nor site with `librecrawl-user add`. See\n[account administration](https://github.com/marcusquinn/cloudron-librecrawl-app/blob/main/docs/README.md)\nfor the commands.\n\n**Warning:** signed-in users can crawl private addresses, other apps and the\nDocker network. Create accounts only for trusted people and sites.\n",
+                "configurePath": "/login",
+                "changelog": "* Security update: move to the digest-pinned Cloudron base image 6.0.1 with its patched CA bundle and shared MIME data. LibreCrawl stays at commit 05a1372.\n",
+                "packagerName": "Marcus Quinn",
+                "packagerUrl": "https://github.com/marcusquinn",
+                "dockerImage": "ghcr.io/marcusquinn/cloudron-librecrawl-app@sha256:b20ffa2629407e03d7a840aea6ac9a80099e3a681bb4c4c04474b7423e18c505"
+            },
+            "creationDate": "Wed, 28 Oct 2026 23:57:04 GMT",
+            "ts": "Wed, 28 Oct 2026 23:57:04 GMT",
+            "publishState": "published"
         }
     }
 }
