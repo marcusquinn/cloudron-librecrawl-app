@@ -20,7 +20,7 @@ in to, crawl themselves on a schedule and import the results.
 
 ## Install
 
-On Cloudron 9.1 or newer, add this version catalog under **Community apps** in
+On Cloudron 10.0 or newer, add this version catalog under **Community apps** in
 the dashboard, or install it with the Cloudron CLI:
 
 ```bash
@@ -35,9 +35,9 @@ Then follow the post-install message to sign in, and read the
 
 | Component | Baseline |
 | --- | --- |
-| Package | 0.1.1 |
+| Package | 0.1.2 |
 | LibreCrawl | Commit `05a1372de8334ca18dec0bc1f7470c62901a9418` (MIT) |
-| Cloudron | v9.1.0+ |
+| Cloudron | v10.0.0+ |
 | Memory | 2 GiB; increase for Chromium rendering |
 
 Registration and guest access are disabled. Accounts are created by the
