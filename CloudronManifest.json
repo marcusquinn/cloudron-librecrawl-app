@@ -4,7 +4,7 @@
   "author": "Marcus Quinn <marcus@marcusquinn.com>",
   "description": "file://DESCRIPTION.md",
   "tagline": "Website crawling and SEO audits for trusted teams",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "upstreamVersion": "05a1372",
   "healthCheckPath": "/login",
   "httpPort": 5000,
@@ -26,7 +26,7 @@
     "name": "MIT",
     "url": "https://github.com/PhialsBasement/LibreCrawl/blob/05a1372de8334ca18dec0bc1f7470c62901a9418/LICENSE"
   },
-  "minBoxVersion": "9.1.0",
+  "minBoxVersion": "10.0.0",
   "memoryLimit": 2147483648,
   "addons": {
     "localstorage": {},
@@ -42,5 +42,6 @@
   "configurePath": "/login",
   "changelog": "file://CHANGELOG",
   "packagerName": "Marcus Quinn",
-  "packagerUrl": "https://github.com/marcusquinn"
+  "packagerUrl": "https://github.com/marcusquinn",
+  "packageUrl": "https://github.com/marcusquinn/cloudron-librecrawl-app"
 }

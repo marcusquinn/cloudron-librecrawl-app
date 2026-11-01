@@ -2,7 +2,7 @@
 
 ## Install and first sign-in
 
-Requires Cloudron 9.1.0 or newer. Add the version catalog
+Requires Cloudron 10.0.0 or newer. Add the version catalog
 `https://raw.githubusercontent.com/marcusquinn/cloudron-librecrawl-app/main/CloudronVersions.json`
 under **Community apps** in the dashboard, or run
 `cloudron install --location <subdomain> --versions-url <catalog URL>`. New
