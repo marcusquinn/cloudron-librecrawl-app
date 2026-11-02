@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-11-02
+
+### Changed
+
+- Set `packagerUrl` to this repository so the Community Apps Package link opens it.
+  ca.cloudron.io builds the Package link (and the "By" link) from `packagerUrl`
+  and ignores `packageUrl`, so the 0.1.2 change had no visible effect
+  (marcusquinn/aidevops#36428). `packageUrl` and `minBoxVersion` 10.0.0 are unchanged.
+- No change to the app; LibreCrawl stays at commit 05a1372.
+
 ## [0.1.2] - 2026-11-01
 
 ### Changed

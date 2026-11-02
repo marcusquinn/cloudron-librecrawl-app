@@ -4,7 +4,7 @@
   "author": "Marcus Quinn <marcus@marcusquinn.com>",
   "description": "file://DESCRIPTION.md",
   "tagline": "Website crawling and SEO audits for trusted teams",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "upstreamVersion": "05a1372",
   "healthCheckPath": "/login",
   "httpPort": 5000,
@@ -42,6 +42,6 @@
   "configurePath": "/login",
   "changelog": "file://CHANGELOG",
   "packagerName": "Marcus Quinn",
-  "packagerUrl": "https://github.com/marcusquinn",
+  "packagerUrl": "https://github.com/marcusquinn/cloudron-librecrawl-app",
   "packageUrl": "https://github.com/marcusquinn/cloudron-librecrawl-app"
 }
