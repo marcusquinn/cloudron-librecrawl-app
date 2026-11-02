@@ -1,3 +1,8 @@
+[0.1.4]
+* Update LibreCrawl to commit 5ae2792.
+* Honour the configured crawl delay with JavaScript rendering disabled.
+* Fix saving and loading large crawl files and improve large-site link bookkeeping performance.
+
 [0.1.3]
 * The Community Apps Package link now opens this repository. The listing builds that link from packagerUrl, so the 0.1.2 packageUrl change had no visible effect.
 * No change to the app; LibreCrawl stays at commit 05a1372.
