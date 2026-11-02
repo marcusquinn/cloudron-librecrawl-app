@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-11-02
+
+### Changed
+
+- Update the pinned LibreCrawl revision from `05a1372` to `5ae2792` (issue #30).
+  Cloudron base 6.0.1, the Cloudron 10 minimum and signed-in-only settings are unchanged.
+
+### Fixed
+
+- Include upstream's crawl-delay fix for crawls with JavaScript rendering disabled.
+- Include upstream's row-wise save/load handling for large crawl files and
+  incremental link bookkeeping to avoid quadratic work on large sites.
+
 ## [0.1.3] - 2026-11-02
 
 ### Changed
