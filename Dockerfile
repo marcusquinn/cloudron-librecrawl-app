@@ -1,7 +1,7 @@
 FROM cloudron/base:6.0.1@sha256:7b1e729960c3ca312d26e886917ba89483241bba0219ff292858e10d9d5768ee
 
 LABEL org.opencontainers.image.source="https://github.com/marcusquinn/cloudron-librecrawl-app"
-ARG LIBRECRAWL_COMMIT=5ae27926145246d14bb34fbd967193080a55fbe9
+ARG LIBRECRAWL_COMMIT=8f4d31d560d87d4c1da92c87938fea8fc5a89f44
 ENV PLAYWRIGHT_BROWSERS_PATH=/app/code/ms-playwright \
     PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \

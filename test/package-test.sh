@@ -2,8 +2,8 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
-jq -e '.manifestVersion == 2 and .version == "0.1.4" and .upstreamVersion == "5ae2792" and .httpPort == 5000 and .healthCheckPath == "/login" and .minBoxVersion == "10.0.0" and .packagerUrl == "https://github.com/marcusquinn/cloudron-librecrawl-app" and .packageUrl == "https://github.com/marcusquinn/cloudron-librecrawl-app" and .memoryLimit == 2147483648 and .addons.localstorage == {} and .addons.scheduler.retention.schedule == "0 3 * * *" and .addons.scheduler.retention.command == "/app/code/bin/librecrawl-retention" and (.addons | has("proxyAuth") | not) and (.addons | has("proxyauth") | not)' CloudronManifest.json >/dev/null
-grep -Fxq 'ARG LIBRECRAWL_COMMIT=5ae27926145246d14bb34fbd967193080a55fbe9' Dockerfile
+jq -e '.manifestVersion == 2 and .version == "0.1.5" and .upstreamVersion == "8f4d31d" and .httpPort == 5000 and .healthCheckPath == "/login" and .minBoxVersion == "10.0.0" and .packagerUrl == "https://github.com/marcusquinn/cloudron-librecrawl-app" and .packageUrl == "https://github.com/marcusquinn/cloudron-librecrawl-app" and .memoryLimit == 2147483648 and .addons.localstorage == {} and .addons.scheduler.retention.schedule == "0 3 * * *" and .addons.scheduler.retention.command == "/app/code/bin/librecrawl-retention" and (.addons | has("proxyAuth") | not) and (.addons | has("proxyauth") | not)' CloudronManifest.json >/dev/null
+grep -Fxq 'ARG LIBRECRAWL_COMMIT=8f4d31d560d87d4c1da92c87938fea8fc5a89f44' Dockerfile
 grep -Fq 'cloudron/base:6.0.1@sha256:7b1e729960c3ca312d26e886917ba89483241bba0219ff292858e10d9d5768ee' Dockerfile
 grep -Fq 'playwright install --with-deps chromium' Dockerfile
 grep -Fq 'ln -s /app/data /app/code/data' Dockerfile
