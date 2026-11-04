@@ -37,7 +37,7 @@ jobs:
     #   uses: marcusquinn/aidevops/.github/workflows/loc-badge-reusable.yml@<40-char-sha> # vX.Y.Z
     #   aidevops_ref: <40-char-sha> # vX.Y.Z
     # If `aidevops_ref` is omitted, helpers come from the commit `uses:` resolved to.
-    uses: marcusquinn/aidevops/.github/workflows/loc-badge-reusable.yml@33b5da4ae88ff7dca85255c9ae5d106f48878b4f # v3.39.98
+    uses: marcusquinn/aidevops/.github/workflows/loc-badge-reusable.yml@5094036d19e18f81675ba634a7d9a750db8e1538 # v3.39.110
     permissions:
       actions: read
       contents: write
