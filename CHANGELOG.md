@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-11-04
+
+### Changed
+
+- Update the pinned LibreCrawl revision from `5ae2792` to `8f4d31d` (issue #33).
+  This adds configurable CSS/XPath extraction and a list mode for checking an
+  explicit set of URLs without spidering beyond it.
+
+### Fixed
+
+- Reuse each host's robots.txt result during a crawl and surface the reason a
+  crawl failed to start.
+
 ## [0.1.4] - 2026-11-02
 
 ### Changed

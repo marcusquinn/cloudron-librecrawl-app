@@ -1,3 +1,7 @@
+[0.1.5]
+* Update LibreCrawl to commit 8f4d31d with custom CSS/XPath extraction and list-mode crawls.
+* Cache robots.txt per host and show the failure reason when a crawl cannot start.
+
 [0.1.4]
 * Update LibreCrawl to commit 5ae2792.
 * Honour the configured crawl delay with JavaScript rendering disabled.
