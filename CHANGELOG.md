@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-11-05
+
+### Changed
+
+- Update the pinned LibreCrawl revision from `8f4d31d` to `38e3bb4` (issue #39).
+  This adds n-gram analysis with filters and export, table column visibility
+  and sorting, and per-user table column preferences. No new dependencies.
+
 ## [0.1.5] - 2026-11-04
 
 ### Changed
