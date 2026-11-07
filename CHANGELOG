@@ -1,3 +1,6 @@
+[0.1.7]
+* Update LibreCrawl to commit b5b288f, which fixes accounts stuck unverified when email is not configured.
+
 [0.1.6]
 * Update LibreCrawl to commit 38e3bb4 with n-gram analysis and export, table column visibility and sorting, and saved column preferences.
 
