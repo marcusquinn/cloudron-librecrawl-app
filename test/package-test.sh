@@ -3,7 +3,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 jq -e '.manifestVersion == 2 and .version == "0.1.7" and .upstreamVersion == "b5b288f" and .httpPort == 5000 and .healthCheckPath == "/login" and .minBoxVersion == "10.0.0" and .packagerUrl == "https://github.com/marcusquinn/cloudron-librecrawl-app" and .packageUrl == "https://github.com/marcusquinn/cloudron-librecrawl-app" and .memoryLimit == 2147483648 and .addons.localstorage == {} and .addons.scheduler.retention.schedule == "0 3 * * *" and .addons.scheduler.retention.command == "/app/code/bin/librecrawl-retention" and (.addons | has("proxyAuth") | not) and (.addons | has("proxyauth") | not)' CloudronManifest.json >/dev/null
-grep -Fxq 'ARG LIBRECRAWL_COMMIT=38e3bb4b371c02e05fa19c7f60cecbcfc2e5be97' Dockerfile
+grep -Fxq 'ARG LIBRECRAWL_COMMIT=b5b288f489cbdefccd1a0474375e8bd8c9684e5d' Dockerfile
 grep -Fq 'cloudron/base:6.0.1@sha256:7b1e729960c3ca312d26e886917ba89483241bba0219ff292858e10d9d5768ee' Dockerfile
 grep -Fq 'playwright install --with-deps chromium' Dockerfile
 grep -Fq 'ln -s /app/data /app/code/data' Dockerfile
