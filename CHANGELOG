@@ -1,3 +1,6 @@
+[0.1.8]
+* Update LibreCrawl to commit f25bee6 with indexability, inlinks and Link Score, sitemap audit, and saved crawl comparison.
+
 [0.1.7]
 * Update LibreCrawl to commit b5b288f, which fixes accounts stuck unverified when email is not configured.
 
