@@ -48,8 +48,8 @@ session cookie, the settings and the row count of each table survive, and the
 saved crawls still list, read back and load. Two checks are conditional: the
 pre-upgrade snapshot `users.db.bak-<previous commit>` is checked only when the
 upstream pin changes (`start.sh` writes none otherwise), and crawl comparison is
-skipped when the new image returns 404 for it. The output names each skipped
-check. Run it whenever the upstream pin or `start.sh` changes; `--from` and
+skipped when the new image returns 404 for it; `--require-compare` makes that
+404 a failure. The output names each skipped check. Run it whenever the upstream pin or `start.sh` changes; `--from` and
 `--to` take other image references.
 
 Use a disposable Docker volume mounted at `/app/data`, `--read-only`, and tmpfs
