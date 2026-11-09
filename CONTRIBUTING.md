@@ -44,9 +44,13 @@ bash test/upgrade-test.sh
 `test/upgrade-test.sh` starts the previous catalog image on a disposable
 volume, adds an account, settings and two saved crawls, then starts a build of
 this checkout on the same volume. It fails unless the signing key, an existing
-session cookie, every row, the settings and the pre-upgrade snapshot survive and
-the saved crawls still list, load and compare. Run it whenever the upstream pin
-or `start.sh` changes; `--from` and `--to` take other image references.
+session cookie, the settings and the row count of each table survive, and the
+saved crawls still list, read back and load. Two checks are conditional: the
+pre-upgrade snapshot `users.db.bak-<previous commit>` is checked only when the
+upstream pin changes (`start.sh` writes none otherwise), and crawl comparison is
+skipped when the new image returns 404 for it. The output names each skipped
+check. Run it whenever the upstream pin or `start.sh` changes; `--from` and
+`--to` take other image references.
 
 Use a disposable Docker volume mounted at `/app/data`, `--read-only`, and tmpfs
 at `/tmp` and `/run`. Verify `/login`, admin and service-account login, blocked

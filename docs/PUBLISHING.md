@@ -103,8 +103,9 @@ category.
 - Restart and confirm the same cookie and saved crawl work; confirm registration,
   guest and unsafe modes stay disabled.
 - Upgrade from a qualified earlier image; confirm settings/users/crawls and the
-  signing key persist and the pre-upgrade SQLite snapshot exists.
-  `bash test/upgrade-test.sh` checks this locally before the Cloudron update.
+  signing key persist and, when the upstream pin changed, the pre-upgrade SQLite
+  snapshot exists. `bash test/upgrade-test.sh` checks this locally before the
+  Cloudron update; with an unchanged pin it skips the snapshot check and says so.
 - Back up, restore to a disposable app, and re-check users, settings, sessions,
   saved crawls and exports. Exercise retention with child rows on disposable data.
 - Record real Cloudron version and image digest, then submit the package to
