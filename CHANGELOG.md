@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7] - 2026-11-07
+
+### Changed
+
+- Update the pinned LibreCrawl revision from `38e3bb4` to `b5b288f` (issue #41).
+  Upstream fixes accounts stuck unverified without email, loads `.env` before
+  the email settings, and adds `manage.py`. No new dependencies; accounts stay
+  managed with `librecrawl-user`.
+
 ## [0.1.6] - 2026-11-05
 
 ### Changed
