@@ -6,6 +6,8 @@
 
 - **Validate**: `cloudron-package-helper.sh validate`
 - **Static checks**: `bash test/package-test.sh`
+- **Upgrade check**: `bash test/upgrade-test.sh` (Docker; previous catalog image to a
+  build of this checkout on one `/app/data` volume)
 - **Shell lint**: `shellcheck start.sh bin/librecrawl-user bin/librecrawl-retention scripts/*.sh test/*.sh`
 - **Build**: `cloudron-package-helper.sh build`
 - **Test install**: `cloudron-package-helper.sh install librecrawl-test`
