@@ -18,9 +18,9 @@ paste it into an issue. GHCR image pushes use the workflow's `GITHUB_TOKEN`.
 
 1. Update manifest version, upstream commit pin and both changelogs in a PR.
 2. Complete local verification and review, then merge to main. Local
-   verification includes `bash test/upgrade-test.sh` (Docker, about 2 GB per
-   image), which upgrades the previous catalog image to a build of the PR on
-   one `/app/data` volume; see [CONTRIBUTING.md](../CONTRIBUTING.md#package-verification).
+   verification includes `bash test/upgrade-test.sh --require-compare` (Docker,
+   about 2 GB per image), which upgrades the previous catalog image to a build
+   of the PR on one `/app/data` volume; see [CONTRIBUTING.md](../CONTRIBUTING.md#package-verification).
    It does not replace the catalog-to-catalog update check in step 8.
 3. Once explicitly enabled, the catalog workflow builds the verified source
    as `linux/amd64`, pushes `ghcr.io/marcusquinn/cloudron-librecrawl-app`, and
@@ -104,8 +104,9 @@ category.
   guest and unsafe modes stay disabled.
 - Upgrade from a qualified earlier image; confirm settings/users/crawls and the
   signing key persist and, when the upstream pin changed, the pre-upgrade SQLite
-  snapshot exists. `bash test/upgrade-test.sh` checks this locally before the
-  Cloudron update; with an unchanged pin it skips the snapshot check and says so.
+  snapshot exists. `bash test/upgrade-test.sh --require-compare` checks this
+  locally before the Cloudron update; with an unchanged pin it skips the
+  snapshot check and says so.
 - Back up, restore to a disposable app, and re-check users, settings, sessions,
   saved crawls and exports. Exercise retention with child rows on disposable data.
 - Record real Cloudron version and image digest, then submit the package to

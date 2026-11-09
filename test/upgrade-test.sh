@@ -16,6 +16,7 @@ EMAIL=upgrade-check@example.invalid
 FROM_IMAGE=""
 TO_IMAGE=""
 READY_TIMEOUT=300
+REQUIRE_COMPARE=false
 CONTAINER=""
 CONTAINERS=""
 WORK_DIR=""
@@ -27,6 +28,7 @@ PASSWORD=""
 usage() {
     cat <<'EOF'
 Usage: test/upgrade-test.sh [--from IMAGE] [--to IMAGE] [--timeout SECONDS]
+                            [--require-compare]
 
   --from IMAGE   Image to upgrade from. Default: the newest CloudronVersions.json
                  entry older than CloudronManifest.json's version.
@@ -34,6 +36,10 @@ Usage: test/upgrade-test.sh [--from IMAGE] [--to IMAGE] [--timeout SECONDS]
                  checkout, tagged librecrawl-upgrade-test:candidate.
   --timeout N    Seconds to wait for each container to answer GET /login
                  (default 300; emulated hosts are slow).
+  --require-compare
+                 Fail if the upgraded image has no crawl comparison endpoint
+                 (HTTP 404). Without it, that check is skipped with a note.
+                 Use it for release checks; packages from 0.1.8 have it.
 EOF
     return 0
 }
@@ -73,6 +79,7 @@ parse_args() {
             --from) [[ $# -ge 2 ]] || fail '--from needs an image'; FROM_IMAGE="$2"; shift 2 ;;
             --to) [[ $# -ge 2 ]] || fail '--to needs an image'; TO_IMAGE="$2"; shift 2 ;;
             --timeout) [[ $# -ge 2 && "$2" =~ ^[1-9][0-9]*$ ]] || fail '--timeout needs a positive integer'; READY_TIMEOUT="$2"; shift 2 ;;
+            --require-compare) REQUIRE_COMPARE=true; shift ;;
             -h|--help) usage; exit 0 ;;
             *) usage >&2; fail "unknown argument: $1" ;;
         esac
@@ -327,6 +334,9 @@ check_api() {
     expect_json '.success == true and .urls_count == 3 and .issues_count == 1' 'saved crawl loads into a session'
     api GET "/api/crawls/compare?previous=$PREVIOUS_ID&current=$CURRENT_ID" "$jar" || fail 'compare request failed'
     if [[ "$API_STATUS" == 404 ]] && ! jq -e . >/dev/null 2>&1 <<<"$API_BODY"; then
+        if [[ "$REQUIRE_COMPARE" == true ]]; then
+            fail 'expected: crawl comparison endpoint exists (HTTP 404)'
+        fi
         log 'note: candidate has no crawl comparison endpoint; skipped'
     else
         expect_json '.success == true and .total_changes > 0' 'crawls saved before the upgrade can be compared'
