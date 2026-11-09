@@ -10,8 +10,10 @@ Please do not open public issues for security vulnerabilities.
 
 ## Supported versions
 
-Package 0.1.x pins LibreCrawl to commit `05a1372`. This is a new package;
-production qualification on Cloudron is tracked separately from local testing.
+Only the latest 0.1.x package release is supported. Each release pins one
+LibreCrawl commit, recorded as `upstreamVersion` in `CloudronManifest.json` and
+in the changelog. This is a new package; production qualification on Cloudron
+is tracked separately from local testing.
 Upstream dependencies are not a guarantee of vulnerability-free operation.
 
 ## Trust boundary
