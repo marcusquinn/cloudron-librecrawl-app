@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-11-09
+
+### Changed
+
+- Update the pinned LibreCrawl revision from `b5b288f` to `f25bee6` (issue #47).
+  This adds end-of-crawl analysis (indexability, inlinks, outlinks and Link
+  Score), a sitemap audit, and comparison of two saved crawls with CSV export.
+  The crawl database adds an `analysis` column on first start; existing crawls
+  stay readable. No new dependencies.
+- `SECURITY.md` no longer names a fixed upstream commit; it points to the
+  manifest's `upstreamVersion` instead.
+
 ## [0.1.7] - 2026-11-07
 
 ### Changed
