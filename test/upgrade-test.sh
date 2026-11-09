@@ -57,6 +57,7 @@ fail() {
         printf -- '--- last log lines of %s ---\n' "$CONTAINER" >&2
         docker logs --tail 40 "$CONTAINER" >&2 2>&1 || true
     fi
+    # exit is the terminal path; an explicit return here would be unreachable.
     exit 1
 }
 
@@ -75,13 +76,15 @@ cleanup() {
 
 parse_args() {
     while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --from) [[ $# -ge 2 ]] || fail '--from needs an image'; FROM_IMAGE="$2"; shift 2 ;;
-            --to) [[ $# -ge 2 ]] || fail '--to needs an image'; TO_IMAGE="$2"; shift 2 ;;
-            --timeout) [[ $# -ge 2 && "$2" =~ ^[1-9][0-9]*$ ]] || fail '--timeout needs a positive integer'; READY_TIMEOUT="$2"; shift 2 ;;
+        local arg="$1"
+        local value="${2:-}"
+        case "$arg" in
+            --from) [[ $# -ge 2 ]] || fail '--from needs an image'; FROM_IMAGE="$value"; shift 2 ;;
+            --to) [[ $# -ge 2 ]] || fail '--to needs an image'; TO_IMAGE="$value"; shift 2 ;;
+            --timeout) [[ $# -ge 2 && "$value" =~ ^[1-9][0-9]*$ ]] || fail '--timeout needs a positive integer'; READY_TIMEOUT="$value"; shift 2 ;;
             --require-compare) REQUIRE_COMPARE=true; shift ;;
             -h|--help) usage; exit 0 ;;
-            *) usage >&2; fail "unknown argument: $1" ;;
+            *) usage >&2; fail "unknown argument: $arg" ;;
         esac
     done
     return 0
