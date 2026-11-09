@@ -38,7 +38,15 @@ cloudron-package-helper.sh check-compatibility
 bash test/package-test.sh
 shellcheck start.sh bin/librecrawl-user bin/librecrawl-retention scripts/*.sh test/*.sh
 docker build --platform linux/amd64 -t librecrawl-cloudron:dev .
+bash test/upgrade-test.sh
 ```
+
+`test/upgrade-test.sh` starts the previous catalog image on a disposable
+volume, adds an account, settings and two saved crawls, then starts a build of
+this checkout on the same volume. It fails unless the signing key, an existing
+session cookie, every row, the settings and the pre-upgrade snapshot survive and
+the saved crawls still list, load and compare. Run it whenever the upstream pin
+or `start.sh` changes; `--from` and `--to` take other image references.
 
 Use a disposable Docker volume mounted at `/app/data`, `--read-only`, and tmpfs
 at `/tmp` and `/run`. Verify `/login`, admin and service-account login, blocked

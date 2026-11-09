@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `test/upgrade-test.sh`, a local Docker check that upgrades the previous
+  catalog image to a build of the checkout on one `/app/data` volume and
+  confirms the signing key, sessions, data, settings and pre-upgrade snapshot
+  survive (issue #50). The package image is unchanged.
+
 ## [0.1.8] - 2026-11-09
 
 ### Changed
