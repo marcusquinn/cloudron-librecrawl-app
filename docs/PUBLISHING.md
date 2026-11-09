@@ -19,8 +19,8 @@ paste it into an issue. GHCR image pushes use the workflow's `GITHUB_TOKEN`.
 1. Update manifest version, upstream commit pin and both changelogs in a PR.
 2. Complete local verification and review, then merge to main. Local
    verification includes `bash test/upgrade-test.sh --require-compare` (Docker,
-   about 2 GB per image), which upgrades the previous catalog image to a build of the PR on
-   one `/app/data` volume; see [CONTRIBUTING.md](../CONTRIBUTING.md#package-verification).
+   about 2 GB per image), which upgrades the previous catalog image to a build
+   of the PR on one `/app/data` volume; see [CONTRIBUTING.md](../CONTRIBUTING.md#package-verification).
    It does not replace the catalog-to-catalog update check in step 8.
 3. Once explicitly enabled, the catalog workflow builds the verified source
    as `linux/amd64`, pushes `ghcr.io/marcusquinn/cloudron-librecrawl-app`, and
