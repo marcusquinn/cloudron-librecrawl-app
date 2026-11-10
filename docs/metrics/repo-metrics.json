@@ -1,7 +1,7 @@
 {
   "schema": "aidevops.repo-metrics.v1",
   "schema_version": 1,
-  "generated_at": "2026-11-09T01:17:00Z",
+  "generated_at": "2026-11-10T13:21:32Z",
   "tool": {
     "name": "aidevops repo-metrics",
     "version": "1.0.0"
@@ -11,10 +11,10 @@
     "slug": "marcusquinn/cloudron-librecrawl-app"
   },
   "summary": {
-    "source_files": 34,
-    "code": 1998,
-    "comments": 82,
-    "blanks": 398,
+    "source_files": 35,
+    "code": 2490,
+    "comments": 94,
+    "blanks": 439,
     "languages": 6,
     "dependencies": 0
   },
@@ -22,28 +22,28 @@
     {
       "name": "Markdown",
       "files": 19,
-      "code": 1179,
+      "code": 1224,
       "comments": 0,
-      "blanks": 364,
-      "percentage": 59.01,
+      "blanks": 373,
+      "percentage": 49.16,
       "color": "#083fa1"
     },
     {
       "name": "JSON",
       "files": 2,
-      "code": 456,
+      "code": 572,
       "comments": 0,
       "blanks": 0,
-      "percentage": 22.82,
+      "percentage": 22.97,
       "color": "#292929"
     },
     {
       "name": "Shell",
-      "files": 4,
-      "code": 191,
-      "comments": 30,
-      "blanks": 12,
-      "percentage": 9.56,
+      "files": 5,
+      "code": 522,
+      "comments": 42,
+      "blanks": 44,
+      "percentage": 20.96,
       "color": "#89e051"
     },
     {
@@ -52,7 +52,7 @@
       "code": 117,
       "comments": 52,
       "blanks": 20,
-      "percentage": 5.86,
+      "percentage": 4.7,
       "color": "#cb171e"
     },
     {
@@ -61,7 +61,7 @@
       "code": 28,
       "comments": 0,
       "blanks": 2,
-      "percentage": 1.4,
+      "percentage": 1.12,
       "color": "#384d54"
     },
     {
@@ -70,7 +70,7 @@
       "code": 27,
       "comments": 0,
       "blanks": 0,
-      "percentage": 1.35,
+      "percentage": 1.08,
       "color": "#6e7781"
     }
   ],
