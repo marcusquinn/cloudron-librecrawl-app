@@ -1,3 +1,6 @@
+[0.1.9]
+* Update LibreCrawl to commit 789c236, which forces UTF-8 output so redirected logs no longer crash on Windows.
+
 [0.1.8]
 * Update LibreCrawl to commit f25bee6 with indexability, inlinks and Link Score, sitemap audit, and saved crawl comparison.
 
