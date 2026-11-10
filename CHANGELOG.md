@@ -16,6 +16,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   endpoint fail the check instead of skipping it (issue #52). The package image
   is unchanged.
 
+## [0.1.9] - 2026-11-10
+
+### Changed
+
+- Update the pinned LibreCrawl revision from `f25bee6` to `789c236` (issue #56).
+  The only application change is forcing UTF-8 on stdout and stderr in
+  `main.py`; the rest is start scripts, CI and README for non-Cloudron installs.
+  No new dependencies.
+
 ## [0.1.8] - 2026-11-09
 
 ### Changed
