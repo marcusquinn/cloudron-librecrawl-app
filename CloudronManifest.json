@@ -42,6 +42,6 @@
   "configurePath": "/login",
   "changelog": "file://CHANGELOG",
   "packagerName": "Marcus Quinn",
-  "packagerUrl": "https://github.com/marcusquinn/cloudron-librecrawl-app",
+  "packagerUrl": "https://github.com/marcusquinn",
   "packageUrl": "https://github.com/marcusquinn/cloudron-librecrawl-app"
 }
